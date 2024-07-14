@@ -46,9 +46,6 @@
               <a class="nav-link" href="{{url_for('log')}}">Login</a>
               <a class="nav-link" href="{{url_for('add_product')}}">My purchases</a>
               <a class="nav-link" href="{{url_for('register')}}">register</a>
-                {% if 'user' in session %}
-                <a class="nav-link" href="/logout">Logout</a>
-                  {% endif %}
             </div>
           </div>
           {% block content %}{% endblock %}

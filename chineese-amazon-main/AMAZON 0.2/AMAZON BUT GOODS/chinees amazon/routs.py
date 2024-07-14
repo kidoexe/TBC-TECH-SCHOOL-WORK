@@ -33,7 +33,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        return redirect("/dashboard")
+        return redirect("/")
     return render_template("registration.html", form=form)
 
 @app.route("/log", methods=["POST", "GET"])
@@ -42,13 +42,14 @@ def log():
     if form.validate_on_submit():
         user = User.query.filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user)
-            return redirect("/")
+            login_user(user) 
+            return redirect("/dashboard")
     return render_template("login.html", form=form, )
     
 @app.route("/logout", methods=["POST", "GET"])
-
+@login_required
 def logout():
+
     logout_user()
     return redirect("/")
     
@@ -66,22 +67,8 @@ def add_product():
                                text=form.text.data)
         db.session.add(new_product)
         db.session.commit()
-        return redirect("/")
+        return redirect("/dashboard")
     
     return render_template("amazonproducts.html", form=form)
 
-@app.route("/edit_product/<int:id>", methods=["POST", "GET"])
-@login_required
-def edit_product(id):
-    product = Product.query.get(id)
-
-    form = AddProduct(name=product_name, text=product_text, price=product_price,)
-
-    if form.validate_on_submit():
-        product_name = form.name.data
-        product_text = form.text.data
-        product_price = form.price.data
-    
-        db.session.commit()
-        return redirect("/")
     
